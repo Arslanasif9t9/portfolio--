@@ -29,15 +29,15 @@ const AboutSection = () => {
 
   const handleVideoClick = () => {
     if (!isPlaying) {
-      // If video is not playing, start playing
       videoRef.current?.play();
       setIsPlaying(true);
       // Hide controls after playing
       setTimeout(() => setShowControls(false), 2000);
     } else {
-      // If video is playing, pause it
       videoRef.current?.pause();
       setIsPlaying(false);
+      // Show controls when paused
+      setShowControls(true);
     }
   };
 
@@ -97,9 +97,11 @@ const AboutSection = () => {
                   loop
                   playsInline
                   className="w-full h-full object-cover"
-                  // poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23181818'/%3E%3Cstop offset='100%25' stop-color='%23000000'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='800' fill='url(%23a)'/%3E%3Ctext x='50%25' y='50%25' font-family='monospace' font-size='24' fill='%23ffffff' text-anchor='middle' dy='.3em'%3EWeb Development Showcase%3C/text%3E%3C/svg%3E"
                   onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
+                  onPause={() => {
+                    setIsPlaying(false);
+                    setShowControls(true);
+                  }}
                 >
                   <source src={video} type="video/mp4" />
                   Your browser does not support the video tag.
@@ -115,34 +117,6 @@ const AboutSection = () => {
                     {isPlaying ? 'Playing' : 'Paused'}
                   </span>
                 </div>
-                
-                {/* Centered Play Button (only shows when video is not playing) */}
-                {!isPlaying && (
-                  <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="relative">
-                      {/* Glow Effect */}
-                      <div className="absolute inset-0 bg-primary/30 blur-xl rounded-full scale-125" />
-                      
-                      {/* Play Button */}
-                      <div className="relative p-6 rounded-full shadow-2xl bg-gradient-to-br from-primary to-secondary">
-                        <Play size={32} className="text-white fill-white ml-1" />
-                      </div>
-                      
-                      {/* Pulsing Animation */}
-                      <motion.div
-                        className="absolute inset-0 border-2 border-primary/50 rounded-full"
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                    </div>
-                  </motion.div>
-                )}
 
                 {/* Controls Overlay */}
                 {showControls && (
@@ -152,6 +126,21 @@ const AboutSection = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                   >
+                    {/* Play/Pause Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlayPause();
+                      }}
+                      className="p-2 rounded-lg glass-card hover:bg-primary/20 transition-colors"
+                    >
+                      {isPlaying ? (
+                        <Pause size={18} className="text-foreground" />
+                      ) : (
+                        <Play size={18} className="text-foreground" />
+                      )}
+                    </button>
+                    
                     {/* Mute/Unmute Button */}
                     <button
                       onClick={(e) => {
@@ -171,7 +160,7 @@ const AboutSection = () => {
               </div>
 
               {/* Floating Animated Elements */}
-              <motion.div
+              {/* <motion.div
                 className="absolute -top-4 -right-4 glass-card p-3 rounded-lg z-20"
                 animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
@@ -189,26 +178,37 @@ const AboutSection = () => {
                 <div className="bg-gradient-to-br from-secondary to-primary p-2 rounded-lg">
                   <Database className="text-white" size={20} />
                 </div>
-              </motion.div>
+              </motion.div> */}
 
-              {/* Video Title */}
-              <motion.div 
-                className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 glass-card px-4 py-2 rounded-full border border-primary/30"
+              {/* Play Button - Changed from text to button with icon */}
+              <motion.button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }}
+                className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 glass-card px-4 py-2 rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all duration-300 active:scale-95 flex items-center gap-2"
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 transition={{ delay: 0.3 }}
               >
-                <div className="flex items-center gap-2">
-                  {isPlaying ? (
+                {isPlaying ? (
+                  <>
                     <Pause size={14} className="text-primary" />
-                  ) : (
+                    <span className="text-sm font-medium text-foreground whitespace-nowrap">
+                      Click to Pause
+                    </span>
+                  </>
+                ) : (
+                  <>
                     <Play size={14} className="text-primary" />
-                  )}
-                  <p className="text-sm font-medium text-foreground whitespace-nowrap">
-                    {isPlaying ? 'Click to Pause' : 'Click to Play'}
-                  </p>
-                </div>
-              </motion.div>
+                    <span className="text-sm font-medium text-foreground whitespace-nowrap">
+                      Click to Play
+                    </span>
+                  </>
+                )}
+              </motion.button>
 
               {/* Volume Indicator */}
               {isPlaying && (
@@ -238,7 +238,7 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-          >
+            >
             <h3 className="text-2xl font-display font-bold text-foreground mb-4">
               Passionate Full-Stack Web Developer
             </h3>
