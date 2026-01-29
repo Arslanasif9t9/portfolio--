@@ -73,6 +73,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
     live: 'https://arslan.mjcheezain.com/',
     category: 'Full-Stack',
+    github: 'https://github.com/Arslanasif9t9/multivendor-ecommerce-laravel'
   },
   {
     title: 'Al-Kuwait E-Commerce',
@@ -81,6 +82,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop',
     live: 'https://alkuwait.mjcheezain.com/',
     category: 'Full-Stack',
+    github: 'https://github.com/Arslanasif9t9/al-kuwait-ecommerce'
   },
   {
     title: 'BlogSphere',
@@ -89,6 +91,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=400&fit=crop',
     live: 'https://blogsphere.mjcheezain.com/',
     category: 'Web App',
+    github: 'https://github.com/Arslanasif9t9/blogsphere-laravel'
   },
   {
     title: 'IoT Automatic Car Parking',
@@ -96,24 +99,25 @@ const projects = [
     tech: ['Embedded C++', 'PHP', 'IoT', 'JavaScript', 'MySQL'],
     image: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=600&h=400&fit=crop',
     category: 'Hardware/IoT',
+    github: 'https://github.com/Arslanasif9t9/iot-automatic-car-parking'
   },
   {
     title: 'React TextUtils',
     description: 'A specialized React utility application for text manipulation. Features include real-time case conversion (Upper/Lower), extra space removal, reading time calculations, and text-to-speech capabilities.',
     tech: ['React', 'JavaScript', 'HTML5', 'CSS3'],
     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop',
-    // github: 'https://github.com/arslanasif9t9/react-text',
+    github: 'https://github.com/arslanasif9t9/react-text',
     live: 'https://arslanasif9t9.github.io/react-text/',
-    category: 'React Tool',
+    category: 'React Tool'
   },
   {
     title: 'iCoder Bootstrap Portal',
     description: 'A modern, responsive coding blog and educational template built using the Bootstrap framework. Focuses on high-quality UI components, clean typography, and mobile-first design principles.',
     tech: ['Bootstrap 5', 'HTML5', 'CSS3', 'JavaScript'],
     image: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=600&h=400&fit=crop',
-    // github: 'https://github.com/Arslanasif9t9/iCoder_Bootstrap',
+    github: 'https://github.com/Arslanasif9t9/iCoder_Bootstrap',
     live: 'https://arslanasif9t9.github.io/iCoder_Bootstrap/',
-    category: 'Frontend',
+    category: 'Frontend'
   },
 ];
 

@@ -8,15 +8,16 @@ interface BlogCardProps {
   date: string;
   category: string;
   readTime: string;
-  link: string; // This will be the URL to your PDF file
+  link: string; // The URL to your PDF
   img: string;
 }
 
 const BlogCard = ({ title, excerpt, date, category, readTime, link, img }: BlogCardProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
+      {/* Blog Card UI */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -28,7 +29,7 @@ const BlogCard = ({ title, excerpt, date, category, readTime, link, img }: BlogC
         <div className="glass-card rounded-xl overflow-hidden h-full transition-all duration-300
                         hover:border-primary/50 hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] flex flex-col">
           
-          {/* 1. Small Height Image at Top */}
+          {/* Image at Top with small height */}
           <div className="h-32 w-full overflow-hidden">
             <img 
               src={img} 
@@ -59,62 +60,93 @@ const BlogCard = ({ title, excerpt, date, category, readTime, link, img }: BlogC
                 <span>{date}</span>
               </div>
               
-              {/* 2. Read More Button */}
+              {/* Read More Button */}
               <button 
-                onClick={() => setIsOpen(true)}
-                className="flex items-center gap-1 text-sm font-medium text-primary hover:underline group/btn"
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors uppercase tracking-tight"
               >
                 Read More
-                <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* 3. Modal / PDF Box */}
+      {/* Modal - Based on your CV design */}
       <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" style={{zIndex: 99}}>
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            {/* Background Overlay */}
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-background border border-border w-full max-w-4xl h-[80vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              {/* Modal Header */}
-              <div className="p-4 border-b border-border flex justify-between items-center bg-card">
-                <div className="flex items-center gap-3">
-                  <FileText className="text-primary" />
-                  <h3 className="font-bold truncate max-w-[200px] md:max-w-md">{title}</h3>
-                </div>
-                <div className="flex items-center gap-2">
-                  <a 
-                    href={link} 
-                    download 
-                    className="p-2 hover:bg-secondary rounded-full transition-colors text-primary"
-                    title="Download PDF"
-                  >
-                    <Download size={20} />
-                  </a>
-                  <button 
-                    onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-secondary rounded-full transition-colors"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-              </div>
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setIsModalOpen(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
 
-              {/* PDF Viewer (Iframe) */}
-              <div className="flex-grow bg-muted">
-                <iframe
-                  src={`${link}#toolbar=0`}
-                  className="w-full h-full"
-                  title="PDF Viewer"
-                />
-              </div>
-            </motion.div>
+            {/* Modal Box */}
+            <AnimatePresence>
+              {isModalOpen && (
+                /* CHANGED: Increased z-index to 9999 to ensure it covers the navbar */
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                  
+                  {/* Background Overlay */}
+                  <motion.div 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }}
+                    onClick={() => setIsModalOpen(false)}
+                    /* Ensure backdrop is also high z-index via the parent */
+                    className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                  />
+
+                  {/* Modal Box */}
+                  <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }} 
+                    animate={{ scale: 1, opacity: 1 }} 
+                    exit={{ scale: 0.9, opacity: 0 }}
+                    className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+                  >
+                    {/* Modal Header */}
+                    <div className="p-4 border-b flex justify-between items-center bg-white sticky top-0 z-[10000]">
+                      <div className="flex items-center gap-4">
+                        <span className="font-bold text-gray-800 uppercase tracking-tight hidden md:block text-sm">
+                          {title}
+                        </span>
+                        <a
+                          href={link}
+                          download
+                          className="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-wider bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                        >
+                          <Download size={16} />
+                          Download PDF
+                        </a>
+                      </div>
+
+                      <button 
+                        onClick={() => setIsModalOpen(false)} 
+                        className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <X size={24} />
+                      </button>
+                    </div>
+
+                    {/* Modal Body - CV Style Scrollable Area */}
+                    <div className="overflow-y-auto p-4 md:p-8 bg-gray-100 flex-grow">
+                      <div className="mx-auto max-w-3xl shadow-xl bg-white min-h-[1100px]">
+                        <iframe
+                            src={`${link}#toolbar=0&navpanes=0`}
+                            className="w-full h-[1100px] border-none"
+                            title="Blog Content"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </AnimatePresence>
