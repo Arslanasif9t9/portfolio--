@@ -160,7 +160,7 @@ const AboutSection = () => {
               </div>
 
               {/* Floating Animated Elements */}
-              {/* <motion.div
+              <motion.div
                 className="absolute -top-4 -right-4 glass-card p-3 rounded-lg z-20"
                 animate={{ y: [0, -8, 0], rotate: [0, 5, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
@@ -178,7 +178,7 @@ const AboutSection = () => {
                 <div className="bg-gradient-to-br from-secondary to-primary p-2 rounded-lg">
                   <Database className="text-white" size={20} />
                 </div>
-              </motion.div> */}
+              </motion.div>
 
               {/* Play Button - Changed from text to button with icon */}
               <motion.button 

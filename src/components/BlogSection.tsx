@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import BlogCard from './BlogCard';
+import pdf from '../../public/blog.pdf'
 
 // const blogs = [
 //   {
@@ -8,7 +9,7 @@ import BlogCard from './BlogCard';
 //     date: 'Jan 15, 2026',
 //     category: 'Backend',
 //     readTime: '8 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 //   {
 //     title: 'React Server Components: A Deep Dive',
@@ -16,7 +17,7 @@ import BlogCard from './BlogCard';
 //     date: 'Jan 10, 2026',
 //     category: 'React',
 //     readTime: '12 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 //   {
 //     title: 'TypeScript vs JavaScript in 2026',
@@ -24,7 +25,7 @@ import BlogCard from './BlogCard';
 //     date: 'Jan 5, 2026',
 //     category: 'TypeScript',
 //     readTime: '10 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 //   {
 //     title: 'Mastering Database Optimization',
@@ -32,7 +33,7 @@ import BlogCard from './BlogCard';
 //     date: 'Dec 28, 2025',
 //     category: 'Database',
 //     readTime: '15 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 //   {
 //     title: 'Docker for Web Developers',
@@ -40,7 +41,7 @@ import BlogCard from './BlogCard';
 //     date: 'Dec 20, 2025',
 //     category: 'DevOps',
 //     readTime: '11 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 //   {
 //     title: 'Building Real-time Apps with WebSockets',
@@ -48,7 +49,7 @@ import BlogCard from './BlogCard';
 //     date: 'Dec 15, 2025',
 //     category: 'Full-Stack',
 //     readTime: '9 min read',
-//     link: '#',
+//     link: pdf,
 //   },
 // ];
 
@@ -59,7 +60,8 @@ const blogs = [
     date: 'Jan 25, 2026',
     category: 'Backend',
     readTime: '12 min read',
-    link: '#',
+    link: pdf,
+    img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80'
   },
   {
     title: 'Bridging Software and Hardware: IoT Parking Systems',
@@ -67,7 +69,8 @@ const blogs = [
     date: 'Jan 18, 2026',
     category: 'IoT',
     readTime: '10 min read',
-    link: '#',
+    link: pdf,
+    img: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w-800&auto=format&fit=crop&q=80'
   },
   {
     title: 'Mastering the Laravel Admin Dashboard',
@@ -75,7 +78,8 @@ const blogs = [
     date: 'Jan 12, 2026',
     category: 'Full-Stack',
     readTime: '8 min read',
-    link: '#',
+    link: pdf,
+    img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80'
   },
   {
     title: 'Text Manipulation in React: Beyond basic Hooks',
@@ -83,24 +87,9 @@ const blogs = [
     date: 'Jan 05, 2026',
     category: 'React',
     readTime: '6 min read',
-    link: '#',
-  },
-  {
-    title: 'Moving from Bootstrap to Tailwind CSS',
-    excerpt: 'Why utility-first CSS is a game-changer for Laravel developers. Comparing workflow speed, bundle sizes, and design flexibility.',
-    date: 'Dec 28, 2025',
-    category: 'Design',
-    readTime: '9 min read',
-    link: '#',
-  },
-  {
-    title: 'Scaling E-commerce Databases with MySQL',
-    excerpt: 'A guide to optimizing database schemas for large inventory systems and tracking orders across multi-page e-commerce applications.',
-    date: 'Dec 20, 2025',
-    category: 'Database',
-    readTime: '11 min read',
-    link: '#',
-  },
+    link: pdf,
+    img: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=80'
+  }
 ];
 
 const BlogSection = () => {
@@ -130,7 +119,7 @@ const BlogSection = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-secondary to-accent mx-auto rounded-full mt-4" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {blogs.map((blog, index) => (
             <BlogCard key={blog.title} {...blog} />
           ))}

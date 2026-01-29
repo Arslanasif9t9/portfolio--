@@ -24,7 +24,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-4 relative group">
+    <section id="contact" className="py-20 px-4 relative group" style={{zIndex: -1}}>
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none
                     transition-all duration-500 group-hover:bg-primary/20 group-hover:scale-110" />
