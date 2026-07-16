@@ -34,6 +34,43 @@ function serviceClient() {
   );
 }
 
+async function sha256(s: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+// deno-lint-ignore no-explicit-any
+async function getAdminUser(admin: any): Promise<{ id: string; email: string } | null> {
+  const { data: role } = await admin
+    .from("user_roles").select("user_id").eq("role", "admin").limit(1).maybeSingle();
+  if (!role) return null;
+  const { data } = await admin.auth.admin.getUserById(role.user_id);
+  if (!data?.user?.email) return null;
+  return { id: data.user.id, email: data.user.email };
+}
+
+async function sendOtpEmail(to: string, code: string): Promise<boolean> {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key) return false;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      from: "Portfolio Admin <onboarding@resend.dev>",
+      to: [to],
+      subject: `🔐 Your password reset code: ${code}`,
+      html: `
+        <div style="font-family:system-ui,sans-serif;max-width:480px;margin:0 auto;text-align:center">
+          <h2 style="color:#6C3DE8">Password Reset</h2>
+          <p>Use this code to reset your admin password. It expires in <strong>10 minutes</strong>.</p>
+          <div style="font-size:36px;letter-spacing:10px;font-weight:bold;background:#f4f4f8;border-radius:12px;padding:20px;margin:20px 0">${code}</div>
+          <p style="color:#888;font-size:12px">If you didn't request this, you can safely ignore this email.</p>
+        </div>`,
+    }),
+  });
+  return res.ok;
+}
+
 // deno-lint-ignore no-explicit-any
 async function requireAdmin(req: Request, admin: any): Promise<string | null> {
   const auth = req.headers.get("authorization") ?? "";
@@ -131,6 +168,63 @@ Deno.serve(async (req) => {
         .update({ last_status: `fail: ${msg.slice(0, 80)}` }).eq("id", p.id);
       return json({ ok: false, error: msg }, 200, headers);
     }
+  }
+
+  if (body.action === "forgot_password") {
+    const user = await getAdminUser(admin);
+    if (!user) return json({ error: "no_admin" }, 404, headers);
+
+    // Rate limit: max 3 codes per 15 minutes
+    const recent = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const { count } = await admin
+      .from("password_reset_codes").select("id", { count: "exact", head: true })
+      .eq("user_id", user.id).gte("created_at", recent);
+    if ((count ?? 0) >= 3) return json({ error: "rate_limited" }, 429, headers);
+
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    await admin.from("password_reset_codes")
+      .update({ used: true }).eq("user_id", user.id).eq("used", false);
+    await admin.from("password_reset_codes").insert({
+      user_id: user.id,
+      code_hash: await sha256(code),
+      expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+    });
+
+    const sent = await sendOtpEmail(user.email, code);
+    if (!sent) return json({ error: "email_not_configured" }, 503, headers);
+    const masked = user.email.replace(/^(..).*(@.*)$/, "$1•••$2");
+    return json({ ok: true, maskedEmail: masked }, 200, headers);
+  }
+
+  if (body.action === "reset_password") {
+    const code = String((body as { code?: string }).code ?? "").trim();
+    const newPassword = String((body as { newPassword?: string }).newPassword ?? "");
+    if (!/^\d{6}$/.test(code) || newPassword.length < 8) {
+      return json({ error: "invalid_input" }, 400, headers);
+    }
+    const user = await getAdminUser(admin);
+    if (!user) return json({ error: "no_admin" }, 404, headers);
+
+    const { data: row } = await admin
+      .from("password_reset_codes").select("*")
+      .eq("user_id", user.id).eq("used", false)
+      .gte("expires_at", new Date().toISOString())
+      .order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (!row) return json({ error: "no_valid_code" }, 400, headers);
+    if (row.attempts >= 5) return json({ error: "too_many_attempts" }, 429, headers);
+
+    if (row.code_hash !== (await sha256(code))) {
+      await admin.from("password_reset_codes")
+        .update({ attempts: row.attempts + 1 }).eq("id", row.id);
+      return json({ error: "wrong_code" }, 400, headers);
+    }
+
+    const { error: updErr } = await admin.auth.admin.updateUserById(user.id, {
+      password: newPassword,
+    });
+    if (updErr) return json({ error: "update_failed" }, 500, headers);
+    await admin.from("password_reset_codes").update({ used: true }).eq("id", row.id);
+    return json({ ok: true }, 200, headers);
   }
 
   return json({ error: "unknown_action" }, 400, headers);

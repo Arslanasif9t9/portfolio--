@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { FaWhatsapp, FaFacebook, FaLinkedin, FaGithub } from 'react-icons/fa';
-import { getSupabase } from '@/lib/supabase';
+import { isSupabaseConfigured, SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabaseEnv';
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
@@ -47,20 +47,29 @@ const ContactSection = () => {
       return;
     }
 
-    const supabase = getSupabase();
-    if (!supabase) {
+    if (!isSupabaseConfigured) {
       toast.error('Contact form is not available right now. Please email me directly!');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('contact_messages').insert({
-        name: values.name,
-        email: values.email,
-        message: values.message,
+      // Edge function saves the message AND emails the owner via Resend
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          apikey: SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          name: values.name,
+          email: values.email,
+          message: values.message,
+        }),
       });
-      if (error) throw error;
+      const data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error ?? 'send failed');
 
       localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
       toast.success("Message sent! I'll get back to you soon. 🚀");

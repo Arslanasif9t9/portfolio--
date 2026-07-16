@@ -34,6 +34,18 @@ export const testProvider = (id: string) =>
     true
   );
 
+export const forgotPassword = () =>
+  callAdminFn<{ ok?: boolean; maskedEmail?: string; error?: string }>({
+    action: 'forgot_password',
+  });
+
+export const resetPassword = (code: string, newPassword: string) =>
+  callAdminFn<{ ok?: boolean; error?: string }>({
+    action: 'reset_password',
+    code,
+    newPassword,
+  });
+
 /** Signed-in user is an admin? (reads own user_roles row under RLS) */
 export async function isAdmin(): Promise<boolean> {
   const supabase = requireSupabase();

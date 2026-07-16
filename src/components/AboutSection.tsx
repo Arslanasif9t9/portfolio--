@@ -118,6 +118,7 @@ const AboutSection = () => {
                   ref={videoRef}
                   loop
                   playsInline
+                  preload="none"
                   muted={isMuted}
                   className="w-full h-full object-cover"
                 >
