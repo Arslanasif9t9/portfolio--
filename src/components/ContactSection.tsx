@@ -1,19 +1,76 @@
 import { motion } from 'framer-motion';
-import { Mail, MapPin, Send, Phone } from 'lucide-react';
+import { Mail, MapPin, Send, Phone, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast } from 'sonner';
 import { FaWhatsapp, FaFacebook, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { getSupabase } from '@/lib/supabase';
+
+const contactSchema = z.object({
+  name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
+  email: z.string().trim().email('Please enter a valid email address').max(255),
+  message: z.string().trim().min(10, 'Message must be at least 10 characters').max(5000),
+  // Honeypot: real users never fill this hidden field
+  website: z.string().max(0).optional().or(z.literal('')),
+});
+
+type ContactFormValues = z.infer<typeof contactSchema>;
+
+const COOLDOWN_KEY = 'contact-last-sent';
+const COOLDOWN_MS = 60_000;
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { name: '', email: '', message: '', website: '' },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+  const onSubmit = async (values: ContactFormValues) => {
+    // Honeypot filled → silently pretend success (bot)
+    if (values.website) {
+      reset();
+      return;
+    }
+
+    const lastSent = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
+    if (Date.now() - lastSent < COOLDOWN_MS) {
+      toast.error('Please wait a minute before sending another message.');
+      return;
+    }
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      toast.error('Contact form is not available right now. Please email me directly!');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('contact_messages').insert({
+        name: values.name,
+        email: values.email,
+        message: values.message,
+      });
+      if (error) throw error;
+
+      localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
+      toast.success("Message sent! I'll get back to you soon. 🚀");
+      reset();
+    } catch (err) {
+      console.error('Contact form error:', err);
+      toast.error('Something went wrong. Please try again or email me directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const socialLinks = [
@@ -24,7 +81,7 @@ const ContactSection = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 px-4 relative group" style={{zIndex: -1}}>
+    <section id="contact" className="py-20 px-4 relative group">
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none
                     transition-all duration-500 group-hover:bg-primary/20 group-hover:scale-110" />
@@ -60,8 +117,8 @@ const ContactSection = () => {
               Let's Build Something Amazing
             </h3>
             <p className="text-muted-foreground mb-8">
-              I'm always excited to work on innovative web projects and 
-              full-stack applications. Whether you have a specific project 
+              I'm always excited to work on innovative web projects and
+              full-stack applications. Whether you have a specific project
               in mind or just want to chat about technology, feel free to reach out.
             </p>
 
@@ -107,7 +164,7 @@ const ContactSection = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.1,
                     boxShadow: '0 0 30px hsl(var(--primary) / 0.5)',
                   }}
@@ -127,61 +184,89 @@ const ContactSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
+            noValidate
           >
+            {/* Honeypot — hidden from real users, bots fill it */}
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              {...register('website')}
+            />
+
             <div className="relative group">
               <input
                 type="text"
                 placeholder="Your Name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 className="floating-input w-full"
-                required
+                aria-invalid={!!errors.name}
+                {...register('name')}
               />
               <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100
                              bg-gradient-to-r from-primary/5 to-secondary/5 pointer-events-none
                              transition-opacity duration-300" />
+              {errors.name && (
+                <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="relative group">
               <input
                 type="email"
                 placeholder="Your Email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="floating-input w-full"
-                required
+                aria-invalid={!!errors.email}
+                {...register('email')}
               />
               <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100
                              bg-gradient-to-r from-primary/5 to-secondary/5 pointer-events-none
                              transition-opacity duration-300" />
+              {errors.email && (
+                <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="relative group">
               <textarea
                 placeholder="Your Message"
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 className="floating-input w-full min-h-[150px] resize-none"
-                required
+                aria-invalid={!!errors.message}
+                {...register('message')}
               />
               <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100
                              bg-gradient-to-r from-primary/5 to-secondary/5 pointer-events-none
                              transition-opacity duration-300" />
+              {errors.message && (
+                <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>
+              )}
             </div>
 
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              disabled={isSubmitting}
+              whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+              whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               className="w-full py-4 font-medium rounded-full bg-gradient-to-r from-primary to-secondary
                         text-primary-foreground flex items-center justify-center gap-2
                         shadow-[0_0_30px_hsl(var(--primary)/0.4)]
-                        hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)] transition-shadow duration-300"
+                        hover:shadow-[0_0_50px_hsl(var(--primary)/0.6)] transition-shadow duration-300
+                        disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <Send size={20} />
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <Loader2 size={20} className="animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send size={20} />
+                  Send Message
+                </>
+              )}
             </motion.button>
           </motion.form>
         </div>

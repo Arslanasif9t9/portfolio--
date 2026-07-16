@@ -7,6 +7,8 @@ import ProjectsSection from '../components/ProjectsSection';
 import BlogSection from '../components/BlogSection';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
+import ChatWidget from '../components/chat/ChatWidget';
+import MobileBottomNav from '../components/MobileBottomNav';
 import { useState, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +18,7 @@ import DownloadCV from '../../public/Arslan_Ahmad_CV.pdf'
 
 const Index = () => {
  const [isCvOpen, setIsCvOpen] = useState(false);
+ const [isChatOpen, setIsChatOpen] = useState(false);
  const contentRef = useRef(null);
  const handleDownloadPdf = useReactToPrint({
   contentRef,
@@ -104,7 +107,19 @@ const Index = () => {
    
    {/* Footer */}
    <Footer />
-   {/* <CV /> */}
+
+   {/* Spacer so the mobile bottom nav doesn't cover the footer */}
+   <div className="h-16 md:hidden" />
+
+   {/* AI Chat: floating widget (desktop) / full-screen sheet (mobile) */}
+   <ChatWidget
+    isOpen={isChatOpen}
+    onToggle={() => setIsChatOpen((v) => !v)}
+    onClose={() => setIsChatOpen(false)}
+   />
+
+   {/* Mobile bottom navbar with center AI button */}
+   <MobileBottomNav onOpenChat={() => setIsChatOpen(true)} />
   </div>
  );
 };
