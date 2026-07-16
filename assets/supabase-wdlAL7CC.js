@@ -1,0 +1,1 @@
+import{c as t}from"./supabase-B-wJXP-E.js";import{x as n,d as u,e as s}from"./index-CB6G3Eve.js";let e=null;function a(){return n?(e||(e=t(s,u,{auth:{persistSession:!0,autoRefreshToken:!0}})),e):null}function f(){const r=a();if(!r)throw new Error("Supabase is not configured");return r}export{f as r};
