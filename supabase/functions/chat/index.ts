@@ -18,6 +18,12 @@ const MAX_INPUT_MESSAGES = 40;
 const MAX_CONTENT_LEN = 8000;
 const RATE_LIMIT_PER_HOUR = 30;
 
+const PHOTO_KEYWORDS = [
+  "your photo", "your picture", "your pic", "show me you", "your image",
+  "how do you look", "send photo", "send a photo", "send me a photo",
+  "show your face", "selfie", "tasveer", "apni photo", "apki photo",
+];
+
 function corsHeaders(origin: string | null) {
   const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
@@ -208,6 +214,21 @@ Deno.serve(async (req) => {
 
   if (session.ai_enabled === false) {
     return json({ reply: null, aiDisabled: true }, 200, headers);
+  }
+
+  // Photo request → serve a gallery photo instead of calling the LLM
+  const lowerMsg = userMessage.content.toLowerCase();
+  if (PHOTO_KEYWORDS.some((k) => lowerMsg.includes(k))) {
+    const { data: photos } = await admin.from("admin_gallery").select("url");
+    if (photos && photos.length > 0) {
+      const pick = photos[Math.floor(Math.random() * photos.length)];
+      const reply = `Here's a photo:\n${pick.url}`;
+      await admin.from("messages").insert({
+        session_id: session.id, role: "assistant", content: reply, provider_used: "gallery",
+      });
+      await trimSessionMessages(admin, session.id);
+      return json({ reply, providerUsed: "gallery" }, 200, headers);
+    }
   }
 
   const { data: profile } = await admin.from("admin_profile").select("*").limit(1).single();
