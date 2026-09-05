@@ -59,7 +59,7 @@ const Resume = () => {
           {/* Header Section */}
           <header className="mb-6">
             <h1 className="text-4xl font-bold uppercase tracking-tighter text-gray-900">Arslan Ahmad</h1>
-            <h2 className="text-xl font-medium text-blue-700 mt-1">"Senior Full-Stack Developer & AI Systems Engineer</h2>
+            <h2 className="text-xl font-medium text-blue-700 mt-1">Senior Full-Stack Developer & AI Systems Engineer</h2>
             
             <div className="text-center flex justify-center flex-wrap gap-x-6 text-sm mt-3 text-gray-600">
               <span><i className="fas fa-envelope mr-1"></i> arslanahmadt58@gmail.com</span>
@@ -80,18 +80,30 @@ const Resume = () => {
           <section className="mb-6">
             <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-2 uppercase text-base tracking-wide text-gray-900">Professional Summary</h3>
             <p className="text-[14px] text-justify leading-relaxed text-gray-700">
-              Innovative Web Developer with 3+ years of experience in architecting high-performance, user-centric applications. 
-              Expertise in modern front-end frameworks and robust back-end systems using PHP and Laravel. 
-              A strong problem solver with a deep foundation in C++, Object-Oriented Programming (OOP), and Data Structures (DSA). 
-              Proven track record of leading projects from conceptual wireframing to full-scale deployment, consistently delivering 
-              scalable and maintainable code for diverse client needs.
+              Senior Full-Stack Developer with 5+ years of experience building high-performance web applications and, over the past year,
+              architecting AI-driven systems and agentic workflows. Skilled in developing and integrating AI agents, chatbots, and automation
+              pipelines using tools like Claude Code and Lovable, alongside strong foundations in React, Laravel, Node.js, and modern databases.
+              Proven track record of leading projects end-to-end — from system architecture to deployment — for both local and international clients.
             </p>
           </section>
 
           {/* Work Experience */}
           <section className="mb-6">
             <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-3 uppercase text-base tracking-wide text-gray-900">Professional Experience</h3>
-            
+
+            <div className="mb-4">
+              <div className="flex justify-between items-baseline font-bold text-[15px]">
+                <span className="text-gray-900">AI Systems Developer & Integration Lead</span>
+                <span className="text-gray-600 text-xs">Jan 2026 – Present</span>
+              </div>
+              <div className="text-blue-700 italic text-sm mb-1">EIA (USA, Remote)</div>
+              <ul className="list-disc ml-5 text-[13.5px] text-gray-700 space-y-1">
+                <li>Develop and integrate AI agents, chatbots, and MCP-based systems into enterprise web applications for US-based clients.</li>
+                <li>Architect natural-language automation pipelines that connect AI models with business workflows and databases.</li>
+                <li>Lead technical project execution end-to-end, from system design to deployment and client delivery.</li>
+              </ul>
+            </div>
+
             <div className="mb-4">
               <div className="flex justify-between items-baseline font-bold text-[15px]">
                 <span className="text-gray-900">Senior Web Designer & Developer (Team Lead)</span>
@@ -106,36 +118,69 @@ const Resume = () => {
               </ul>
             </div>
 
-            <div>
+            <div className="mb-4">
               <div className="flex justify-between items-baseline font-bold text-[15px]">
-                <span className="text-gray-900">Full-Stack Developer (Academic & Freelance)</span>
-                <span className="text-gray-600 text-xs">Jan 2021 – Oct 2025</span>
+                <span className="text-gray-900">Full-Stack Developer (Freelance & Client Projects)</span>
+                <span className="text-gray-600 text-xs">2021 – 2025</span>
               </div>
               <div className="text-blue-700 italic text-sm mb-1">Project-Based Solutions</div>
               <ul className="list-disc ml-5 text-[13.5px] text-gray-700 space-y-1">
-                <li>Delivered 10+ custom web solutions for local clients using HTML5, CSS3, JavaScript, and PHP.</li>
+                <li>Delivered 10+ custom web solutions for local and international clients using HTML5, CSS3, JavaScript, and PHP.</li>
                 <li>Developed complex algorithmic systems in C++ utilizing advanced DSA to solve technical challenges.</li>
-                <li>Managed a digital business venture, mastering the intersection of technology and digital marketing.</li>
                 <li>Implemented responsive design principles ensuring seamless experiences across mobile and desktop.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-baseline font-bold text-[15px]">
+                <span className="text-gray-900">Web Development Intern</span>
+                <span className="text-gray-600 text-xs">1 Month</span>
+              </div>
+              <div className="text-blue-700 italic text-sm mb-1">Climax Solutions</div>
+              <ul className="list-disc ml-5 text-[13.5px] text-gray-700 space-y-1">
+                <li>Hands-on foundational development in PHP, Laravel backend structures, and database workflows.</li>
               </ul>
             </div>
           </section>
 
-          {/* Technical Skills - 3 Column Layout Preserved */}
+          {/* Key Projects */}
+          <section className="mb-6">
+            <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-3 uppercase text-base tracking-wide text-gray-900">Key Projects & Agentic Solutions</h3>
+
+            <div className="mb-3">
+              <p className="font-bold text-[14px] text-gray-900">AI-Powered Project Management System (PMS)</p>
+              <p className="text-[13.5px] text-gray-700">Complex Monday.com-style board architecture featuring AI Agents, MCP Servers, role-based admin locks, real-time state tracking, form builder, and publishing features.</p>
+            </div>
+            <div className="mb-3">
+              <p className="font-bold text-[14px] text-gray-900">Enterprise Multi-Vendor E-Commerce Platform</p>
+              <p className="text-[13.5px] text-gray-700">Scalable Amazon-like multi-vendor ecosystem with real-time order tracking, vendor management, and complex database logic.</p>
+            </div>
+            <div className="mb-3">
+              <p className="font-bold text-[14px] text-gray-900">AI Media Transcriber & Social Workflow Engine</p>
+              <p className="text-[13.5px] text-gray-700">Automated video/reel transcript extraction pipeline integrated with MCP Protocol for seamless data querying.</p>
+            </div>
+            <div>
+              <p className="font-bold text-[14px] text-gray-900">Smart IoT Parking Management System</p>
+              <p className="text-[13.5px] text-gray-700">Live hardware-software synchronization using Python vision/camera models and web management dashboard.</p>
+            </div>
+            <p className="text-[12.5px] italic text-gray-500 mt-2">Additional Projects: Single-Vendor Portals, CMS Platforms, and Custom API Integrations.</p>
+          </section>
+
+          {/* Technical Skills */}
           <section className="mb-6">
             <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-2 uppercase text-base tracking-wide text-gray-900">Technical Competencies</h3>
-            <div className="grid grid-cols-3 gap-4 text-[13px] leading-snug">
+            <div className="space-y-3 text-[13px] leading-snug">
               <div>
-                <p className="font-bold text-blue-800 mb-1">Web Technologies</p>
-                <p>HTML5, CSS3, JavaScript (ES6+), Bootstrap, Tailwind CSS, Basic React, PHP, Laravel</p>
+                <p className="font-bold text-blue-800 mb-1">Full-Stack Web Development</p>
+                <p>React, Laravel, Node.js, Express.js, Next.js (AI-Assisted), PHP, JavaScript (ES6+), MySQL, Supabase, MongoDB (Basic), REST APIs, WebSockets, Tailwind CSS, Bootstrap, HTML5, CSS3</p>
               </div>
               <div>
-                <p className="font-bold text-blue-800 mb-1">Core Programming</p>
-                <p>C, C++, Object Oriented Programming (OOP), Data Structures (DSA), MySQL</p>
+                <p className="font-bold text-blue-800 mb-1">AI Systems Development & Integration</p>
+                <p>Claude Code, Lovable, AI Agents, MCP Servers & Tools, AI Chatbots, AI-Powered Application Integration, Workflow Automation, Twilio API, SMTP Services, AI-Driven Data Operations</p>
               </div>
               <div>
-                <p className="font-bold text-blue-800 mb-1">Tools & DevOps</p>
-                <p>Git, GitHub, VS Code, SQL Workbench, XAMPP, Command Prompt</p>
+                <p className="font-bold text-blue-800 mb-1">Software Engineering & Core</p>
+                <p>Object-Oriented Programming (OOP), Data Structures & Algorithms (DSA), C, C++, Git, GitHub</p>
               </div>
             </div>
           </section>
@@ -159,7 +204,7 @@ const Resume = () => {
             </div>
           </section>
 
-          {/* Awards & Languages - 2 Column Layout Preserved */}
+          {/* Awards & Languages */}
           <div className="grid grid-cols-2 gap-8">
             <section>
               <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-2 uppercase text-sm tracking-wide text-gray-900">Honors & Awards</h3>
