@@ -59,7 +59,7 @@ const Resume = () => {
           {/* Header Section */}
           <header className="mb-6">
             <h1 className="text-4xl font-bold uppercase tracking-tighter text-gray-900">Arslan Ahmad</h1>
-            <h2 className="text-xl font-medium text-blue-700 mt-1">Ideator & Senior Web Developer</h2>
+            <h2 className="text-xl font-medium text-blue-700 mt-1">"Senior Full-Stack Developer & AI Systems Engineer</h2>
             
             <div className="text-center flex justify-center flex-wrap gap-x-6 text-sm mt-3 text-gray-600">
               <span><i className="fas fa-envelope mr-1"></i> arslanahmadt58@gmail.com</span>
