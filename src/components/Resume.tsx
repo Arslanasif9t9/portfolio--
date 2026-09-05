@@ -62,8 +62,8 @@ const Resume = () => {
             <h2 className="text-xl font-medium text-blue-700 mt-1">Ideator & Senior Web Developer</h2>
             
             <div className="text-center flex justify-center flex-wrap gap-x-6 text-sm mt-3 text-gray-600">
-              <span><i className="fas fa-envelope mr-1"></i> arslanahmad4506@gmail.com</span>
-              <span><i className="fas fa-phone mr-1"></i> +92 345 0778252</span>
+              <span><i className="fas fa-envelope mr-1"></i> arslanahmadt58@gmail.com</span>
+              <span><i className="fas fa-phone mr-1"></i> +92 345 0776252</span>
               <span><i className="fas fa-map-marker-alt mr-1"></i> Narowal, Punjab, Pakistan</span>
             </div>
 
