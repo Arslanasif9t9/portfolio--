@@ -146,9 +146,9 @@ const Resume = () => {
             <div className="space-y-3">
               <div className="flex justify-between text-[14px]">
                 <div>
-                  <span className="font-bold">The Sahara University</span> <span className="text-gray-600">| Bachelor’s in Information Technology</span>
+                  <span className="font-bold">Government College University Faisalabad (GCUF)</span> <span className="text-gray-600">| Bachelor of Science in Information Technology</span>
                 </div>
-                <span className="font-semibold text-gray-600 text-xs">2023 – Present</span>
+                <span className="font-semibold text-gray-600 text-xs">2023 – 2027 (Present)</span>
               </div>
               <div className="flex justify-between text-[14px]">
                 <div>
@@ -166,7 +166,7 @@ const Resume = () => {
               <div className="text-[13px] text-gray-700">
                 <p className="font-bold text-gray-900">Best Programmer Award (2024)</p>
                 <p className="italic mb-1">Project Lead - IT Department</p>
-                <p>Achieved 1st Prize in a cross-semester programming competition among all CS students.</p>
+                <p>Achieved 1st Prize in a cross-semester programming competition among all CS & IT students.</p>
               </div>
             </section>
             <section>
