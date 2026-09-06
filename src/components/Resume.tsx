@@ -27,8 +27,6 @@ const Resume = () => {
             box-shadow: none !important;
             border: none !important;
           }
-          /* FIX: Adjust the height of the wrapper to match the scaled content */
-          /* Without this, the wrapper stays 297mm high even if the CV is scaled */
           .mobile-wrapper {
             height: calc(297mm * 0.42); 
           }
@@ -64,13 +62,7 @@ const Resume = () => {
             <div className="text-center flex justify-center flex-wrap gap-x-6 text-sm mt-3 text-gray-600">
               <span><i className="fas fa-envelope mr-1"></i> arslanahmadt58@gmail.com</span>
               <span><i className="fas fa-phone mr-1"></i> +92 345 0776252</span>
-              <span><i className="fas fa-map-marker-alt mr-1"></i> Narowal, Punjab, Pakistan</span>
-            </div>
-
-            <div className="flex justify-center gap-x-6 text-sm mt-2 text-blue-600 font-semibold">
-              <a href="https://linkedin.com/in/arslan-ahmad-983834343/" target="_blank" rel="noreferrer">LinkedIn</a>
-              <span className="text-gray-300">|</span>
-              <a href="https://facebook.com/arslan.asif.70412" target="_blank" rel="noreferrer">Portfolio / Social</a>
+              <span><i className="fas fa-map-marker-alt mr-1"></i> Narowal, Pakistan / Remote</span>
             </div>
           </header>
 
@@ -93,7 +85,7 @@ const Resume = () => {
 
             <div className="mb-4">
               <div className="flex justify-between items-baseline font-bold text-[15px]">
-                <span className="text-gray-900">AI Systems Developer & Integration Lead</span>
+                <span className="text-gray-900">AI Web Systems Developer & Integration Lead</span>
                 <span className="text-gray-600 text-xs">Jan 2026 – Present</span>
               </div>
               <div className="text-blue-700 italic text-sm mb-1">EIA (USA, Remote)</div>
@@ -106,14 +98,14 @@ const Resume = () => {
 
             <div className="mb-4">
               <div className="flex justify-between items-baseline font-bold text-[15px]">
-                <span className="text-gray-900">Senior Web Designer & Developer (Team Lead)</span>
+                <span className="text-gray-900">Senior Web Designer & Developer (Team Lead & Instructor)</span>
                 <span className="text-gray-600 text-xs">Nov 2025 – Present</span>
               </div>
               <div className="text-blue-700 italic text-sm mb-1">Mazain Solution, Narowal</div>
               <ul className="list-disc ml-5 text-[13.5px] text-gray-700 space-y-1">
                 <li>Lead end-to-end development of complex web applications, ensuring 99.9% uptime and high performance.</li>
                 <li>Orchestrate project lifecycles, translating stakeholder business requirements into technical roadmaps.</li>
-                <li>Mentor junior developers through rigorous code reviews and implementation of industry best practices.</li>
+                <li>Mentor and train students as an instructor, conducting hands-on sessions in web development fundamentals.</li>
                 <li>Optimize web performance and SEO, resulting in improved user engagement for corporate clients.</li>
               </ul>
             </div>
@@ -125,7 +117,7 @@ const Resume = () => {
               </div>
               <div className="text-blue-700 italic text-sm mb-1">Project-Based Solutions</div>
               <ul className="list-disc ml-5 text-[13.5px] text-gray-700 space-y-1">
-                <li>Delivered 10+ custom web solutions for local and international clients using HTML5, CSS3, JavaScript, and PHP.</li>
+                <li>Delivered 10+ custom web solutions for local and international clients using HTML5, CSS3, JavaScript, PHP, and Laravel.</li>
                 <li>Developed complex algorithmic systems in C++ utilizing advanced DSA to solve technical challenges.</li>
                 <li>Implemented responsive design principles ensuring seamless experiences across mobile and desktop.</li>
               </ul>
@@ -166,22 +158,22 @@ const Resume = () => {
             <p className="text-[12.5px] italic text-gray-500 mt-2">Additional Projects: Single-Vendor Portals, CMS Platforms, and Custom API Integrations.</p>
           </section>
 
-          {/* Technical Skills */}
+          {/* Technical Skills - 2 Column Layout */}
           <section className="mb-6">
             <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-2 uppercase text-base tracking-wide text-gray-900">Technical Competencies</h3>
-            <div className="space-y-3 text-[13px] leading-snug">
+            <div className="grid grid-cols-2 gap-x-6 text-[13px] leading-snug">
               <div>
                 <p className="font-bold text-blue-800 mb-1">Full-Stack Web Development</p>
-                <p>React, Laravel, Node.js, Express.js, Next.js (AI-Assisted), PHP, JavaScript (ES6+), MySQL, Supabase, MongoDB (Basic), REST APIs, WebSockets, Tailwind CSS, Bootstrap, HTML5, CSS3</p>
+                <p>React, Laravel, Node.js, Express.js, Next.js, PHP, JavaScript (ES6+), MySQL, Supabase, MongoDB, REST APIs, WebSockets, Twilio, SMTP, Tailwind CSS, Bootstrap, HTML5, CSS3</p>
               </div>
               <div>
-                <p className="font-bold text-blue-800 mb-1">AI Systems Development & Integration</p>
-                <p>Claude Code, Lovable, AI Agents, MCP Servers & Tools, AI Chatbots, AI-Powered Application Integration, Workflow Automation, Twilio API, SMTP Services, AI-Driven Data Operations</p>
+                <p className="font-bold text-blue-800 mb-1">AI Systems & Automation</p>
+                <p>Claude Code, Lovable, AI Agents, MCP Servers & Tools, AI Chatbots, AI-Powered App Integration, Workflow Automation, AI-Driven Data Operations, React Native & Expo</p>
               </div>
-              <div>
-                <p className="font-bold text-blue-800 mb-1">Software Engineering & Core</p>
-                <p>Object-Oriented Programming (OOP), Data Structures & Algorithms (DSA), C, C++, Git, GitHub</p>
-              </div>
+            </div>
+            <div className="mt-3 text-[13px] leading-snug">
+              <p className="font-bold text-blue-800 mb-1">Software Engineering & Tools</p>
+              <p>Object-Oriented Programming (OOP), Data Structures & Algorithms (DSA), C, C++, Git, GitHub, VS Code, Cursor, SQL Workbench, XAMPP, Postman, Command Prompt</p>
             </div>
           </section>
 
@@ -193,7 +185,7 @@ const Resume = () => {
                 <div>
                   <span className="font-bold">Government College University Faisalabad (GCUF)</span> <span className="text-gray-600">| Bachelor of Science in Information Technology</span>
                 </div>
-                <span className="font-semibold text-gray-600 text-xs">2023 – 2027 (Present)</span>
+                <span className="font-semibold text-gray-600 text-xs">2023 – 2027</span>
               </div>
               <div className="flex justify-between text-[14px]">
                 <div>
@@ -204,7 +196,7 @@ const Resume = () => {
             </div>
           </section>
 
-          {/* Awards & Languages */}
+          {/* Awards & Languages - 2 Column Layout */}
           <div className="grid grid-cols-2 gap-8">
             <section>
               <h3 className="font-bold border-b-2 border-gray-200 pb-1 mb-2 uppercase text-sm tracking-wide text-gray-900">Honors & Awards</h3>
