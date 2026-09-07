@@ -5,10 +5,10 @@ import { ChevronDown, Sparkles, Code2, Layout, Eye } from 'lucide-react';
 
 const HeroSection = ({ onViewCv }) => {
   const taglines = [
-    'Building Modern Web Applications',
-    'Full-Stack Web Developer',
-    'Powered by React & laravel',
-    'Crafting Seamless User Experiences',
+    'Building AI-Driven Web Applications',
+    'Senior Full-Stack Developer',
+    'Powered by React, Laravel & Claude Code',
+    'Architecting Agentic AI Systems',
   ];
 
   return (
@@ -94,7 +94,7 @@ const HeroSection = ({ onViewCv }) => {
           >
             <Sparkles className="text-primary animate-pulse-neon" size={16} />
             <span className="text-sm font-mono text-muted-foreground">
-              React • Laravel • MySQL
+              React • Laravel • AI Systems
             </span>
           </motion.div>
 
@@ -108,8 +108,8 @@ const HeroSection = ({ onViewCv }) => {
           </div>
 
           <p className="text-lg text-muted-foreground/80 max-w-2xl mx-auto mb-10">
-            Crafting pixel-perfect, responsive web applications with modern technologies. 
-            From stunning frontends to robust backends. Let's bring your vision to life.
+            Senior Full-Stack Developer with 5+ years of experience building high-performance web applications 
+            and, over the past year, architecting AI-driven systems and agentic workflows. Let's bring your vision to life.
           </p>
 
           {/* CTA Buttons */}
