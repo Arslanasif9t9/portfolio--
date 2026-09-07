@@ -60,7 +60,7 @@ const Index = () => {
    />
    <motion.div 
     initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
-    className="relative w-full max-w-4xl h-[90vh] bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+    className="relative w-full max-w-4xl h-[90dvh] bg-white rounded-2xl overflow-hidden shadow-2xl flex flex-col"
    >
     {/* Modal Header */}
      <div className="p-4 border-b flex justify-between items-center bg-white sticky top-0 z-20 shrink-0">
