@@ -1,59 +1,69 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Resume = () => {
+  const outerRef = useRef(null);
+  const innerRef = useRef(null);
+  const [scale, setScale] = useState(1);
+  const [wrapperHeight, setWrapperHeight] = useState('auto');
+
+  useEffect(() => {
+    const recalc = () => {
+      if (!outerRef.current || !innerRef.current) return;
+
+      const isMobile = window.innerWidth <= 768;
+
+      if (!isMobile) {
+        setScale(1);
+        setWrapperHeight('auto');
+        return;
+      }
+
+      // Reset to natural scale first so we can measure the TRUE unscaled size
+      innerRef.current.style.transform = 'none';
+      const naturalWidth = innerRef.current.scrollWidth;
+      const naturalHeight = innerRef.current.scrollHeight;
+      const containerWidth = outerRef.current.offsetWidth;
+
+      if (naturalWidth > 0 && containerWidth > 0) {
+        const s = Math.min(1, containerWidth / naturalWidth);
+        setScale(s);
+        // Wrapper height = actual full content height * scale, so NOTHING gets clipped,
+        // no matter how many pages the resume grows to in the future.
+        setWrapperHeight(naturalHeight * s);
+      }
+    };
+
+    recalc();
+    window.addEventListener('resize', recalc);
+    // Recalculate once more after fonts/images settle
+    const t = setTimeout(recalc, 300);
+
+    return () => {
+      window.removeEventListener('resize', recalc);
+      clearTimeout(t);
+    };
+  }, []);
+
   return (
     <>
-      {/* CSS to force layout preservation on Mobile */}
       <style dangerouslySetInnerHTML={{ __html: `
-        :root {
-          --cv-width: 210mm;
-        }
-
-        @media screen and (max-width: 768px) {
-          .mobile-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            background-color: transparent; 
-            padding: 0;
-            overflow: hidden;
-            width: 100%;
-          }
-          .resume-container {
-            transform: scale(0.42); 
-            transform-origin: top center;
-            margin: 0 !important;
-            flex-shrink: 0;
-            box-shadow: none !important;
-            border: none !important;
-          }
-          .mobile-wrapper {
-            height: calc(297mm * 0.42); 
-          }
-
-          @media (max-width: 400px) {
-            .resume-container { transform: scale(0.35); }
-            .mobile-wrapper { height: calc(297mm * 0.35); }
-          }
-        }
-
         @media print {
           @page { size: A4; margin: 0; }
           body { background: white; -webkit-print-color-adjust: exact; }
-          .mobile-wrapper { height: auto !important; background: white; }
-          .resume-container {
-            transform: none !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-            width: 210mm !important;
-            height: 297mm !important;
-          }
         }
       `}} />
 
-      <div className="mobile-wrapper">
-        <div className="resume-container w-[210mm] min-h-[297mm] mx-auto p-[12mm] bg-white shadow-2xl my-10 font-sans text-gray-800 leading-tight box-border border border-gray-100">
-          
+      <div
+        ref={outerRef}
+        className="w-full flex justify-center print:!h-auto print:!overflow-visible print:!block"
+        style={{ height: wrapperHeight, overflow: 'hidden' }}
+      >
+        <div
+          ref={innerRef}
+          className="resume-container w-[210mm] min-h-[297mm] mx-auto p-[12mm] bg-white shadow-2xl font-sans text-gray-800 leading-tight box-border border border-gray-100 print:!transform-none print:!shadow-none print:!border-none flex-shrink-0"
+          style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
+        >
+
           {/* Header Section */}
           <header className="mb-6">
             <h1 className="text-4xl font-bold uppercase tracking-tighter text-gray-900">Arslan Ahmad</h1>
