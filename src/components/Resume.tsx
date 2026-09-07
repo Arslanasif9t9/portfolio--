@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+// A4 page width in pixels at 96dpi (210mm)
+const PAGE_WIDTH_PX = 793.7;
+
 const Resume = () => {
   const outerRef = useRef(null);
   const innerRef = useRef(null);
@@ -10,37 +13,39 @@ const Resume = () => {
     const recalc = () => {
       if (!outerRef.current || !innerRef.current) return;
 
-      const isMobile = window.innerWidth <= 768;
+      const containerWidth = outerRef.current.clientWidth;
+      // offsetHeight/scrollHeight are layout-based and are NOT affected by
+      // CSS transform, so this always reflects the TRUE unscaled content height
+      // no matter how many pages the resume grows to.
+      const naturalHeight = innerRef.current.offsetHeight;
 
-      if (!isMobile) {
+      if (containerWidth <= 0) return;
+
+      if (containerWidth >= PAGE_WIDTH_PX) {
+        // Plenty of room (desktop / tablet landscape) — show at full size
         setScale(1);
         setWrapperHeight('auto');
         return;
       }
 
-      // Reset to natural scale first so we can measure the TRUE unscaled size
-      innerRef.current.style.transform = 'none';
-      const naturalWidth = innerRef.current.scrollWidth;
-      const naturalHeight = innerRef.current.scrollHeight;
-      const containerWidth = outerRef.current.offsetWidth;
-
-      if (naturalWidth > 0 && containerWidth > 0) {
-        const s = Math.min(1, containerWidth / naturalWidth);
-        setScale(s);
-        // Wrapper height = actual full content height * scale, so NOTHING gets clipped,
-        // no matter how many pages the resume grows to in the future.
-        setWrapperHeight(naturalHeight * s);
-      }
+      const s = containerWidth / PAGE_WIDTH_PX;
+      setScale(s);
+      setWrapperHeight(naturalHeight * s);
     };
 
     recalc();
-    window.addEventListener('resize', recalc);
-    // Recalculate once more after fonts/images settle
-    const t = setTimeout(recalc, 300);
 
+    // Watch BOTH the outer container (width changes) and the inner content
+    // (height changes as fonts/content load) continuously — no fragile
+    // one-off timers.
+    const ro = new ResizeObserver(recalc);
+    if (outerRef.current) ro.observe(outerRef.current);
+    if (innerRef.current) ro.observe(innerRef.current);
+
+    window.addEventListener('resize', recalc);
     return () => {
+      ro.disconnect();
       window.removeEventListener('resize', recalc);
-      clearTimeout(t);
     };
   }, []);
 
