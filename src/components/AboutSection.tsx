@@ -74,10 +74,10 @@ const AboutSection = () => {
   }, [isPlaying]);
 
   const highlights = [
-    { icon: <Layout size={24} />, label: 'Frontend Dev', desc: 'React, Next & Modern CSS' },
-    { icon: <Terminal size={24} />, label: 'Backend Dev', desc: 'Laravel, Node.js, Express & APIs' },
-    { icon: <Database size={24} />, label: 'Database', desc: 'MySQL & MongoDB' },
-    { icon: <Cloud size={24} />, label: 'Tools', desc: 'AI, git & github' },
+    { icon: <Layout size={24} />, label: 'Full-Stack Dev', desc: 'React, Laravel, Node.js & Next.js' },
+    { icon: <Terminal size={24} />, label: 'AI Systems', desc: 'Claude Code, MCP & AI Agents' },
+    { icon: <Database size={24} />, label: 'Database', desc: 'MySQL, Supabase & MongoDB' },
+    { icon: <Cloud size={24} />, label: 'Automation', desc: 'Workflow & Integration Tools' },
   ];
 
   return (
@@ -208,12 +208,13 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
           >
             <h3 className="text-2xl font-display font-bold text-foreground mb-4">
-              Passionate Full-Stack Web Developer
+              Senior Full-Stack Developer & AI Systems Engineer
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              With a deep passion for web development and creating exceptional user experiences, 
-              I specialize in building modern, scalable web applications. My expertise spans 
-              from crafting beautiful responsive frontends to designing robust backend architectures.
+              With 5+ years of experience building modern, scalable web applications, I've spent the past year 
+              also architecting AI-driven systems and agentic workflows. My expertise spans from crafting robust 
+              full-stack applications with React, Laravel, and Node.js to integrating AI agents, chatbots, and 
+              automation pipelines using tools like Claude Code and Lovable.
             </p>
 
             {/* Highlights Grid */}
