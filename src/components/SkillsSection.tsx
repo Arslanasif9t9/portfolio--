@@ -155,34 +155,99 @@ const MongoDBIcon = () => (
   </svg>
 );
 
+// Simple text-badge icon for tools/services that don't have a clean line-art logo.
+// Keeps the exact same visual language (w-8 h-8, fill-current, svg) as every other icon here.
+const TextIcon = (label: string, fontSize = 7) => () => (
+  <svg viewBox="0 0 24 24" className="w-8 h-8 fill-current">
+    <rect x="1" y="1" width="22" height="22" rx="5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+    <text
+      x="12"
+      y="12.5"
+      textAnchor="middle"
+      dominantBaseline="middle"
+      fontSize={fontSize}
+      fontFamily="monospace"
+      fontWeight="700"
+      fill="currentColor"
+      stroke="none"
+    >
+      {label}
+    </text>
+  </svg>
+);
+
+const SupabaseIcon = TextIcon('SB');
+const TwilioIcon = TextIcon('TW');
+const SMTPIcon = TextIcon('@');
+const RESTIcon = TextIcon('API');
+const WebSocketIcon = TextIcon('WS');
+const ClaudeCodeIcon = TextIcon('CC');
+const LovableIcon = TextIcon('LV');
+const MCPIcon = TextIcon('MCP', 6);
+const AIAgentsIcon = TextIcon('AI');
+const ChatbotIcon = TextIcon('BOT', 6);
+const WorkflowIcon = TextIcon('FLOW', 5);
+const ReactNativeIcon = TextIcon('RN');
+const OOPIcon = TextIcon('OOP', 6);
+const DSAIcon = TextIcon('DSA', 6);
+const CIcon = TextIcon('C');
+const CPPIcon = TextIcon('C++', 6);
+const VSCodeIcon = TextIcon('VS');
+const CursorIcon = TextIcon('CU');
+const SQLWorkbenchIcon = TextIcon('SQL', 6);
+const XAMPPIcon = TextIcon('XA');
+const PostmanIcon = TextIcon('PM');
+const CMDIcon = TextIcon('>_');
 
 
-// Frontend skills
+
+// Full-Stack Web Development skills
 const frontendSkills = [
-  { name: 'HTML', icon: <HTMLIcon /> },
-  { name: 'CSS', icon: <CSSIcon /> },
-  { name: 'JavaScript', icon: <JavaScriptIcon /> },
-  { name: 'Tailwind CSS', icon: <TailwindIcon /> },
-  { name: 'Bootstrap', icon: <BootstrapIcon /> },
   { name: 'React', icon: <ReactIcon /> },
-  { name: 'Next.js', icon: <NextIcon /> },
-];
-
-// Backend skills
-const backendSkills = [
-  { name: 'PHP', icon: <PHPIcon /> },
   { name: 'Laravel', icon: <LaravelIcon /> },
   { name: 'Node.js', icon: <NodeJSIcon /> },
-  { name: 'Express', icon: <ExpressIcon /> },
+  { name: 'Express.js', icon: <ExpressIcon /> },
+  { name: 'Next.js', icon: <NextIcon /> },
+  { name: 'PHP', icon: <PHPIcon /> },
+  { name: 'JavaScript', icon: <JavaScriptIcon /> },
   { name: 'MySQL', icon: <MySQLIcon /> },
+  { name: 'Supabase', icon: <SupabaseIcon /> },
   { name: 'MongoDB', icon: <MongoDBIcon /> },
+  { name: 'REST APIs', icon: <RESTIcon /> },
+  { name: 'WebSockets', icon: <WebSocketIcon /> },
+  { name: 'Twilio', icon: <TwilioIcon /> },
+  { name: 'SMTP', icon: <SMTPIcon /> },
+  { name: 'Tailwind CSS', icon: <TailwindIcon /> },
+  { name: 'Bootstrap', icon: <BootstrapIcon /> },
+  { name: 'HTML5', icon: <HTMLIcon /> },
+  { name: 'CSS3', icon: <CSSIcon /> },
 ];
 
-// Tools skills
+// AI Systems & Automation skills
+const backendSkills = [
+  { name: 'Claude Code', icon: <ClaudeCodeIcon /> },
+  { name: 'Lovable', icon: <LovableIcon /> },
+  { name: 'AI Agents', icon: <AIAgentsIcon /> },
+  { name: 'MCP Servers & Tools', icon: <MCPIcon /> },
+  { name: 'AI Chatbots', icon: <ChatbotIcon /> },
+  { name: 'Workflow Automation', icon: <WorkflowIcon /> },
+  { name: 'React Native & Expo', icon: <ReactNativeIcon /> },
+];
+
+// Software Engineering & Tools
 const toolsSkills = [
+  { name: 'OOP', icon: <OOPIcon /> },
+  { name: 'DSA', icon: <DSAIcon /> },
+  { name: 'C', icon: <CIcon /> },
+  { name: 'C++', icon: <CPPIcon /> },
   { name: 'Git', icon: <GitIcon /> },
   { name: 'GitHub', icon: <GitIcon /> },
-  { name: 'AWS', icon: <AWSIcon /> },
+  { name: 'VS Code', icon: <VSCodeIcon /> },
+  { name: 'Cursor', icon: <CursorIcon /> },
+  { name: 'SQL Workbench', icon: <SQLWorkbenchIcon /> },
+  { name: 'XAMPP', icon: <XAMPPIcon /> },
+  { name: 'Postman', icon: <PostmanIcon /> },
+  { name: 'Command Prompt', icon: <CMDIcon /> },
 ];
 
 const SkillsSection = () => {
@@ -226,7 +291,7 @@ const SkillsSection = () => {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h3 className="text-xl font-display font-semibold text-primary mb-6 text-center">Frontend</h3>
+          <h3 className="text-xl font-display font-semibold text-primary mb-6 text-center">Full-Stack Web Development</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {frontendSkills.map((skill, index) => (
               <SkillBadge
@@ -246,7 +311,7 @@ const SkillsSection = () => {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h3 className="text-xl font-display font-semibold text-secondary mb-6 text-center">Backend</h3>
+          <h3 className="text-xl font-display font-semibold text-secondary mb-6 text-center">AI Systems & Automation</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
             {backendSkills.map((skill, index) => (
               <SkillBadge
@@ -266,7 +331,7 @@ const SkillsSection = () => {
           viewport={{ once: true }}
           className="mb-12"
         >
-          <h3 className="text-xl font-display font-semibold text-accent mb-6 text-center">Tools</h3>
+          <h3 className="text-xl font-display font-semibold text-accent mb-6 text-center">Software Engineering & Tools</h3>
           <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
             {toolsSkills.map((skill, index) => (
               <SkillBadge
