@@ -73,17 +73,37 @@ async function callOpenAICompatible(opts: {
   endpoint: string; apiKey: string; model: string;
   messages: { role: string; content: string }[];
 }) {
-  const res = await fetch(opts.endpoint, {
-    method: "POST",
-    signal: AbortSignal.timeout(8000),
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${opts.apiKey}` },
-    body: JSON.stringify({ model: opts.model, messages: opts.messages, temperature: 0.7 }),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const j = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-  const text = j.choices?.[0]?.message?.content;
-  if (!text) throw new Error("Empty response");
-  return text;
+  const maxAttempts = 2; // 1 original try + 1 retry
+  let lastErr: unknown;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(opts.endpoint, {
+        method: "POST",
+        signal: AbortSignal.timeout(8000),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${opts.apiKey}` },
+        body: JSON.stringify({ model: opts.model, messages: opts.messages, temperature: 0.7 }),
+      });
+
+      // 429 = quota/rate-limit khatam — retry karne ka fayda nahi, foran fail ho jao
+      if (res.status === 429) throw new Error("QUOTA_EXCEEDED");
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const j = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+      const text = j.choices?.[0]?.message?.content;
+      if (!text) throw new Error("Empty response");
+      return text;
+    } catch (e) {
+      lastErr = e;
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "QUOTA_EXCEEDED") throw e; // retry mat karo
+      if (attempt < maxAttempts) {
+        await new Promise((r) => setTimeout(r, 800)); // thoda ruk kar dobara try karo
+      }
+    }
+  }
+  throw lastErr;
 }
 
 async function callGemini(opts: {
@@ -96,20 +116,39 @@ async function callGemini(opts: {
   const contents = opts.messages
     .filter((m) => m.role !== "system")
     .map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] }));
-  const res = await fetch(url, {
-    method: "POST",
-     signal: AbortSignal.timeout(8000),
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents,
-      ...(systemMsg ? { systemInstruction: { parts: [{ text: systemMsg }] } } : {}),
-    }),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const j = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
-  const text = j.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Empty response");
-  return text;
+
+  const maxAttempts = 2;
+  let lastErr: unknown;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        signal: AbortSignal.timeout(8000),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          ...(systemMsg ? { systemInstruction: { parts: [{ text: systemMsg }] } } : {}),
+        }),
+      });
+
+      if (res.status === 429) throw new Error("QUOTA_EXCEEDED");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const j = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
+      const text = j.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) throw new Error("Empty response");
+      return text;
+    } catch (e) {
+      lastErr = e;
+      const msg = e instanceof Error ? e.message : "";
+      if (msg === "QUOTA_EXCEEDED") throw e;
+      if (attempt < maxAttempts) {
+        await new Promise((r) => setTimeout(r, 800));
+      }
+    }
+  }
+  throw lastErr;
 }
 
 async function callLovableGateway(messages: { role: string; content: string }[]) {
@@ -276,7 +315,7 @@ Deno.serve(async (req) => {
       providerUsed = "Lovable AI (fallback)";
     } catch { /* no fallback available */ }
   }
-  if (!replyText) return json({ error: "unavailable" }, 503, headers);
+  if (!replyText) return json({ error: "quota_exceeded" }, 503, headers);
 
   await admin.from("messages").insert({
     session_id: session.id, role: "assistant", content: replyText, provider_used: providerUsed,
