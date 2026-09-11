@@ -72,6 +72,9 @@ export function useChat() {
           },
           body: JSON.stringify({ guestId: getGuestId(), messages: context }),
         });
+        if (!res.ok) {
+          throw new Error(`server_error_${res.status}`);
+        }
         const data = (await res.json()) as {
           reply?: string | null;
           providerUsed?: string;
@@ -90,8 +93,13 @@ export function useChat() {
         } else {
           setError('The assistant is unavailable right now. Please try again later.');
         }
-      } catch {
-        setError('Connection problem — please check your internet and try again.');
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : '';
+        if (msg.startsWith('server_error_')) {
+          setError('The assistant is temporarily unavailable (server issue). Please try again in a moment.');
+        } else {
+          setError('Connection problem — please check your internet and try again.');
+        }
       } finally {
         setSending(false);
       }
