@@ -90,7 +90,11 @@ export function useChat() {
           setError("You've sent quite a few messages — please wait a bit before sending more.");
         } else if (data.error === 'blocked') {
           setError('This chat session is unavailable.');
-        } else {
+        }
+          else if (data.error === 'quota_exceeded') {
+            setError("I'm getting a lot of questions right now and I'm temporarily out of replies — please try again in a few minutes, or use the contact form below!");
+          }
+        else {
           setError('The assistant is unavailable right now. Please try again later.');
         }
       } catch (e) {
