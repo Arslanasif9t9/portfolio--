@@ -75,6 +75,7 @@ async function callOpenAICompatible(opts: {
 }) {
   const res = await fetch(opts.endpoint, {
     method: "POST",
+    signal: AbortSignal.timeout(8000),
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${opts.apiKey}` },
     body: JSON.stringify({ model: opts.model, messages: opts.messages, temperature: 0.7 }),
   });
@@ -97,6 +98,7 @@ async function callGemini(opts: {
     .map((m) => ({ role: m.role === "assistant" ? "model" : "user", parts: [{ text: m.content }] }));
   const res = await fetch(url, {
     method: "POST",
+     signal: AbortSignal.timeout(8000),
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents,
