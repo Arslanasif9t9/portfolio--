@@ -4,6 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Arslan Ahmad - Full Stack Developer</title>
+    <script>
+  // GitHub Pages SPA redirect trick — reads the redirected path back
+  (function () {
+    var l = window.location;
+    if (l.search[1] === 'p' && l.search[2] === '=') {
+      var decoded = l.search.slice(3).split('&').map(function (s) {
+        return s.replace(/~and~/g, '&');
+      });
+      window.history.replaceState(
+        null, null,
+        l.pathname.slice(0, -1) + decoded[0] +
+        (decoded[1] ? '?' + decoded[1] : '') +
+        l.hash
+      );
+    }
+  })();
+</script>
     <meta
       name="description"
       content="Full stack developer building websites, web apps and AI integrations with React, Laravel, PHP and MySQL. Based in Pakistan, working with clients worldwide."
